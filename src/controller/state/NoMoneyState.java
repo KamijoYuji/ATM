@@ -30,7 +30,7 @@ public class NoMoneyState extends ATMState {
             if (context.getCardBalance() <= 0) {
                 context.setMessage("На карте нет денег. Баланс: 0 руб.");
             } else {
-                context.setMessage("В банкомате нет наличных. Обратитесь в другой банкомат.");
+                context.setMessage("В банкомате нет наличных.");
             }
         }
     }
