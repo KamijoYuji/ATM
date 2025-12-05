@@ -28,10 +28,16 @@ public class PinState extends ATMState {
                 context.setMessage("PIN верный! Баланс карты: " + context.getCardBalance() +
                         " руб. Наличные в банкомате: " + context.getATMCash() +
                         " руб. Введите сумму:");
-                context.setState(context.getHasMoneyState());
+                context.setState(new HasMoneyState(context));
+                context.setSecondMessage(context.isWaitingForNewAmount()?"Новая сумма (макс "+context.getCardBalance()+"):":
+                        "Сумма (макс "+context.getCardBalance()+"):");
+                context.setEnabled(true);
             } else {
+                context.setEnabled(false);
                 context.setMessage("PIN верный! Но на карте или в банкомате нет денег.");
-                context.setState(context.getNoMoneyState());
+                context.setSecondMessage("Ввод");
+                context.setState(new NoMoneyState(context));
+
             }
         } else {
             context.setMessage("Неверный PIN! Попробуйте снова");

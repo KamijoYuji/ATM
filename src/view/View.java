@@ -64,7 +64,7 @@ public class View extends JFrame implements Observer {
         confirmButton = new JButton("Подтвердить");
         cancelButton = new JButton("Отмена");
 
-        confirmButton.addActionListener(_ -> {
+        confirmButton.addActionListener(e -> {
             String input = inputField.getText().trim();
             if (!input.isEmpty()) {
                 if (controller.isPinState()) {
@@ -77,7 +77,7 @@ public class View extends JFrame implements Observer {
             controller.processConfirm();
         });
 
-        cancelButton.addActionListener(_ -> {
+        cancelButton.addActionListener(e -> {
             controller.processCancel();
             inputField.setText("");
             inputField.requestFocus();
@@ -98,23 +98,9 @@ public class View extends JFrame implements Observer {
         balanceLabel.setText("Баланс карты: " + controller.getCardBalance() +
                 " руб. | Наличные в банкомате: " + controller.getATMCash() + " руб.");
 
-        if (controller.isPinState()) {
-            inputLabel.setText("PIN-код (1234):");
-            inputField.setEnabled(true);
-        } else if (controller.isHasMoneyState()) {
-            if (controller.isWaitingForNewAmount()) {
-                inputLabel.setText("Новая сумма (макс " + controller.getCardBalance() + "):");
-            } else {
-                inputLabel.setText("Сумма (макс " + controller.getCardBalance() + "):");
-            }
-            inputField.setEnabled(true);
-        } else {
-            inputLabel.setText("Ввод:");
-            inputField.setEnabled(false);
-        }
+        inputLabel.setText(controller.getSecondMessage());
+        inputField.setEnabled(controller.isEnabled());
 
-        if (inputField.isEnabled()) {
-            inputField.requestFocus();
-        }
+        if (inputField.isEnabled()) inputField.requestFocus();
     }
 }

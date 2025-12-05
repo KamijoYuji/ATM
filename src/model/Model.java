@@ -10,16 +10,12 @@ public class Model extends Observable {
     public static final String CORRECT_PIN = "1234";
     public static final int INITIAL_CARD_BALANCE = 1000;
     public static final int INITIAL_ATM_CASH = 5000;
-
     private ATMState currentState;
-    private ATMState pinState;
-    private ATMState hasMoneyState;
-    private ATMState noMoneyState;
-    private ATMState dispensingState;
-
     private String enteredPin = "";
     private int enteredAmount = 0;
     private String message = "Введите PIN (тест: 1234)";
+    private String secondMessage = "PIN-код (1234):";
+    private boolean enabled = true;
     private boolean waitingForNewAmount = false;
 
     private int cardBalance = INITIAL_CARD_BALANCE;
@@ -31,13 +27,24 @@ public class Model extends Observable {
         return instance;
     }
 
-    private Model() {
-        pinState = new PinState(this);
-        hasMoneyState = new HasMoneyState(this);
-        noMoneyState = new NoMoneyState(this);
-        dispensingState = new DispensingState(this);
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-        currentState = pinState;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getSecondMessage() {
+        return secondMessage;
+    }
+
+    public void setSecondMessage(String secondMessage) {
+        this.secondMessage = secondMessage;
+    }
+
+    private Model() {
+        currentState = new PinState(this);
     }
 
     public void enterPin(String pin) {
@@ -84,7 +91,6 @@ public class Model extends Observable {
         setChanged();
         notifyObservers();
     }
-
     public boolean isPinCorrect() {
         return enteredPin.equals(CORRECT_PIN);
     }
@@ -101,7 +107,6 @@ public class Model extends Observable {
             notifyObservers();
         }
     }
-
     public void resetPin() {
         enteredPin = "";
     }
@@ -115,13 +120,7 @@ public class Model extends Observable {
         enteredAmount = 0;
         waitingForNewAmount = false;
     }
-
-    public ATMState getPinState() { return pinState; }
-    public ATMState getHasMoneyState() { return hasMoneyState; }
-    public ATMState getNoMoneyState() { return noMoneyState; }
-    public ATMState getDispensingState() { return dispensingState; }
     public StateEnum getCurrentState() { return currentState.getStateEnum(); }
-
     public void notifyObservers() {
         setChanged();
         super.notifyObservers();

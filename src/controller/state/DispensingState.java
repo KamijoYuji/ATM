@@ -31,12 +31,17 @@ public class DispensingState extends ATMState {
             context.setMessage("Деньги выданы! Остаток на карте: " + context.getCardBalance() +
                     " руб. Наличные в банкомате: " + context.getATMCash() +
                     " руб. Введите сумму для следующего снятия или нажмите Отмена.");
-            context.setState(context.getHasMoneyState());
+            context.setState(new HasMoneyState(context));
+            context.setSecondMessage(context.isWaitingForNewAmount()?"Новая сумма (макс "+context.getCardBalance()+"):":
+                    "Сумма (макс "+context.getCardBalance()+"):");
+            context.setEnabled(true);
             context.resetAmount();
             context.setWaitingForNewAmount(false);
         } else {
             context.setMessage("Деньги выданы! На карте или в банкомате не осталось средств.");
-            context.setState(context.getNoMoneyState());
+            context.setState(new NoMoneyState(context));
+            context.setSecondMessage("Ввод");
+            context.setEnabled(false);
         }
     }
 

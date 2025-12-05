@@ -63,6 +63,14 @@ public class Controller {
         return model.isWaitingForNewAmount();
     }
 
+    public String getSecondMessage()
+    {
+        return model.getSecondMessage();
+    }
+
+    public boolean isEnabled(){
+        return model.isEnabled();
+    }
     public int getCardBalance() {
         return model.getCardBalance();
     }

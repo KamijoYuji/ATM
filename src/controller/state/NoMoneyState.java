@@ -25,7 +25,7 @@ public class NoMoneyState extends ATMState {
     public void handleConfirm() {
         if (context.getCardBalance() > 0 && context.getATMCash() > 0) {
             context.setMessage("Введите сумму (доступно: " + context.getCardBalance() + " руб.):");
-            context.setState(context.getHasMoneyState());
+            context.setState(new HasMoneyState(context));
         } else {
             if (context.getCardBalance() <= 0) {
                 context.setMessage("На карте нет денег. Баланс: 0 руб.");
@@ -38,7 +38,9 @@ public class NoMoneyState extends ATMState {
     @Override
     public void handleCancel() {
         context.setMessage("Операция отменена. Введите PIN:");
-        context.setState(context.getPinState());
+        context.setState(new PinState(context));
+        context.setEnabled(true);
         context.resetSession();
+        context.setSecondMessage("PIN-код (1234):");
     }
 }

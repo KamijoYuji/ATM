@@ -30,7 +30,7 @@ public class HasMoneyState extends ATMState {
 
         if (context.hasEnoughMoney()) {
             context.setMessage("Одобрено! Выдаём " + context.getEnteredAmount() + " руб.");
-            context.setState(context.getDispensingState());
+            context.setState(new DispensingState(context));
         } else {
             if (context.getEnteredAmount() > context.getCardBalance()) {
                 context.setMessage("Недостаточно средств на карте. Ваш баланс: " +
@@ -47,7 +47,7 @@ public class HasMoneyState extends ATMState {
     @Override
     public void handleCancel() {
         context.setMessage("Операция отменена. Введите PIN:");
-        context.setState(context.getPinState());
+        context.setState(new PinState(context));
         context.resetSession();
     }
 }
